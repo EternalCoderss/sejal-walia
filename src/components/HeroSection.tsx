@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowDown, Mail, Linkedin, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import sejalImage from '@/assets/sejudiii.jpg';
 
 const HeroSection = () => {
   return (
@@ -161,12 +162,13 @@ const HeroSection = () => {
             >
               {/* Placeholder Image - Replace with actual Sejal's image */}
               <div className="w-full h-full bg-gradient-to-br from-primary/20 via-accent/20 to-secondary flex items-center justify-center">
-                <div className="text-center">
+                <img src={sejalImage} alt="Sejal walia" className="w-full h-full object-cover scale-150 hover:scale-110 transition-transform duration-300" />
+                {/* <div className="text-center">
                   <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
                     <span className="text-6xl font-bold text-gradient font-space">S</span>
                   </div>
                   <p className="text-sm text-muted-foreground">Sejal Walia</p>
-                </div>
+                </div> */}
               </div>
             </motion.div>
 

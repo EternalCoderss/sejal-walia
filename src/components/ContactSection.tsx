@@ -222,7 +222,7 @@ const ContactSection = ({ selectedPlan }: ContactSectionProps) => {
                     </label>
                     <Input
                       name="name"
-                      placeholder="John Doe"
+                      placeholder="Your name"
                       value={formData.name}
                       onChange={handleChange}
                       className={`bg-secondary/50 border-border focus:border-primary ${errors.name ? 'border-destructive' : ''}`}
@@ -236,7 +236,7 @@ const ContactSection = ({ selectedPlan }: ContactSectionProps) => {
                     <Input
                       name="email"
                       type="email"
-                      placeholder="john@example.com"
+                      placeholder="youremail@example.com"
                       value={formData.email}
                       onChange={handleChange}
                       className={`bg-secondary/50 border-border focus:border-primary ${errors.email ? 'border-destructive' : ''}`}
@@ -252,7 +252,7 @@ const ContactSection = ({ selectedPlan }: ContactSectionProps) => {
                     </label>
                     <Input
                       name="phone"
-                      placeholder="+91 98765 43210"
+                      placeholder="+91 98*******0"
                       value={formData.phone}
                       onChange={handleChange}
                       className="bg-secondary/50 border-border focus:border-primary"

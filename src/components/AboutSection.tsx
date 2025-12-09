@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Target, Users, TrendingUp, Award, Quote } from 'lucide-react';
+import sejalImage from '@/assets/sejudiii.jpg';
 
 const AboutSection = () => {
   const ref = useRef(null);
@@ -37,7 +38,7 @@ const AboutSection = () => {
       
       <div className="container relative z-10 px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left Content - Image + Quote */}
+          {/* Left Content - Image */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -50,20 +51,13 @@ const AboutSection = () => {
               transition={{ duration: 0.3 }}
               className="relative rounded-2xl overflow-hidden glass border border-primary/20"
             >
-              {/* Placeholder for Sejal's professional image */}
-              <div className="aspect-[4/5] bg-gradient-to-br from-primary/10 via-secondary to-accent/10 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <motion.div
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ duration: 4, repeat: Infinity }}
-                    className="w-40 h-40 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 flex items-center justify-center border-4 border-primary/20"
-                  >
-                    <span className="text-7xl font-bold text-gradient font-space">SW</span>
-                  </motion.div>
-                  <h3 className="text-2xl font-bold mb-2">Sejal Walia</h3>
-                  <p className="text-primary font-medium">Business Development Expert</p>
-                  <p className="text-sm text-muted-foreground mt-2">Upwork Profile Optimization Specialist</p>
-                </div>
+              {/* Sejal's professional image - Full size */}
+              <div className="aspect-[4/5] bg-gradient-to-br from-primary/10 via-secondary to-accent/10 overflow-hidden rounded-2xl">
+                <img 
+                  src={sejalImage} 
+                  alt="Sejal Walia" 
+                  className="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-300" 
+                />
               </div>
               
               {/* Decorative Corner */}
@@ -78,7 +72,7 @@ const AboutSection = () => {
               className="absolute -bottom-8 -right-8 max-w-xs p-6 glass rounded-2xl border border-primary/20 glow-primary hidden md:block"
             >
               <Quote className="w-8 h-8 text-primary mb-3" />
-              <p className="text-sm italic text-muted-foreground">
+              <p className="text-sm italic text-white-50">
                 "Your Upwork profile is your digital handshake. Let's make it unforgettable."
               </p>
               <p className="text-xs text-primary font-medium mt-3">— Sejal Walia</p>
