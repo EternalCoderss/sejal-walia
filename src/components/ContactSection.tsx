@@ -1,30 +1,123 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { Mail, Linkedin, Send, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Mail, Linkedin, Send, ArrowUpRight, Sparkles, CheckCircle2, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { z } from 'zod';
 
-const ContactSection = () => {
+// Form validation schema
+const formSchema = z.object({
+  name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
+  email: z.string().trim().email('Invalid email address').max(255, 'Email must be less than 255 characters'),
+  phone: z.string().trim().optional(),
+  upworkProfile: z.string().trim().optional(),
+  message: z.string().trim().min(1, 'Message is required').max(1000, 'Message must be less than 1000 characters'),
+});
+
+interface ContactSectionProps {
+  selectedPlan?: string;
+}
+
+const ContactSection = ({ selectedPlan }: ContactSectionProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    upworkProfile: '',
+    message: '',
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: "Message Sent!",
-        description: "Thanks for reaching out. I'll get back to you soon!",
+    setErrors({});
+
+    // Validate form data
+    const result = formSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach(error => {
+        if (error.path[0]) {
+          fieldErrors[error.path[0] as string] = error.message;
+        }
       });
-    }, 1500);
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Submit to Google Apps Script
+    const googleScriptUrl = localStorage.getItem('googleScriptUrl');
+    
+    if (!googleScriptUrl) {
+      toast({
+        title: "Configuration Required",
+        description: "Please set up Google Sheets integration in the settings.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const submissionData = {
+        ...formData,
+        selectedPlan: selectedPlan || 'Not Selected',
+        timestamp: new Date().toISOString(),
+        source: window.location.origin,
+      };
+
+      await fetch(googleScriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData),
+      });
+
+      setIsSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        upworkProfile: '',
+        message: '',
+      });
+      
+      toast({
+        title: "Request Submitted! 🎉",
+        description: "Thanks for reaching out. I'll get back to you within 24 hours!",
+      });
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your request. Please try again or contact directly via email.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactLinks = [
@@ -61,13 +154,13 @@ const ContactSection = () => {
           className="text-center mb-16"
         >
           <span className="text-primary font-medium text-sm uppercase tracking-widest">
-            Get in Touch
+            Get Started
           </span>
           <h2 className="text-4xl md:text-5xl font-bold font-space mt-4 mb-6">
             Let's <span className="text-gradient">Work Together</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Ready to boost your freelancing career? I'm here to help you stand out and succeed.
+            Ready to boost your freelancing career? Fill out the form below and I'll get back to you within 24 hours.
           </p>
         </motion.div>
 
@@ -79,75 +172,143 @@ const ContactSection = () => {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="glass rounded-2xl p-8"
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground mb-2 block">
-                    Your Name
-                  </label>
-                  <Input
-                    placeholder="John Doe"
-                    className="bg-secondary/50 border-border focus:border-primary"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground mb-2 block">
-                    Email Address
-                  </label>
-                  <Input
-                    type="email"
-                    placeholder="john@example.com"
-                    className="bg-secondary/50 border-border focus:border-primary"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">
-                  Subject
-                </label>
-                <Input
-                  placeholder="Profile Optimization Inquiry"
-                  className="bg-secondary/50 border-border focus:border-primary"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">
-                  Message
-                </label>
-                <Textarea
-                  placeholder="Tell me about your goals and how I can help..."
-                  rows={5}
-                  className="bg-secondary/50 border-border focus:border-primary resize-none"
-                  required
-                />
-              </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 glow-primary group"
-                disabled={isSubmitting}
+            {/* Selected Plan Banner */}
+            {selectedPlan && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 p-4 rounded-xl bg-primary/10 border border-primary/30 flex items-center gap-3"
               >
-                {isSubmitting ? (
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                  >
-                    <Sparkles className="w-5 h-5" />
-                  </motion.div>
-                ) : (
-                  <>
-                    Send Message
-                    <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  </>
-                )}
-              </Button>
-            </form>
+                <Package className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Selected Package</p>
+                  <p className="font-semibold text-primary">{selectedPlan}</p>
+                </div>
+              </motion.div>
+            )}
+
+            {isSubmitted ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-12"
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+                  className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/20 flex items-center justify-center"
+                >
+                  <CheckCircle2 className="w-10 h-10 text-primary" />
+                </motion.div>
+                <h3 className="text-2xl font-bold mb-4">Request Submitted!</h3>
+                <p className="text-muted-foreground mb-6">
+                  Thank you for your interest. I'll review your request and get back to you within 24 hours.
+                </p>
+                <Button
+                  onClick={() => setIsSubmitted(false)}
+                  variant="outline"
+                  className="border-primary/30 hover:bg-primary/10"
+                >
+                  Submit Another Request
+                </Button>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground mb-2 block">
+                      Your Name *
+                    </label>
+                    <Input
+                      name="name"
+                      placeholder="John Doe"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className={`bg-secondary/50 border-border focus:border-primary ${errors.name ? 'border-destructive' : ''}`}
+                    />
+                    {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground mb-2 block">
+                      Email Address *
+                    </label>
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="john@example.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`bg-secondary/50 border-border focus:border-primary ${errors.email ? 'border-destructive' : ''}`}
+                    />
+                    {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground mb-2 block">
+                      Phone Number
+                    </label>
+                    <Input
+                      name="phone"
+                      placeholder="+91 98765 43210"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="bg-secondary/50 border-border focus:border-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground mb-2 block">
+                      Upwork Profile URL
+                    </label>
+                    <Input
+                      name="upworkProfile"
+                      placeholder="https://www.upwork.com/freelancers/..."
+                      value={formData.upworkProfile}
+                      onChange={handleChange}
+                      className="bg-secondary/50 border-border focus:border-primary"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground mb-2 block">
+                    Tell me about your goals *
+                  </label>
+                  <Textarea
+                    name="message"
+                    placeholder="What's your freelancing niche? What challenges are you facing? What results are you hoping to achieve?"
+                    rows={5}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className={`bg-secondary/50 border-border focus:border-primary resize-none ${errors.message ? 'border-destructive' : ''}`}
+                  />
+                  {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
+                </div>
+
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 glow-primary group"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                    >
+                      <Sparkles className="w-5 h-5" />
+                    </motion.div>
+                  ) : (
+                    <>
+                      Submit Request
+                      <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
           </motion.div>
 
           {/* Contact Info */}
@@ -205,8 +366,8 @@ const ContactSection = () => {
                 <span className="font-semibold">Ready to Transform Your Profile?</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Book a free consultation to discuss how we can optimize your Upwork 
-                presence and start landing more clients.
+                Select a package above and fill out the form. I'll review your profile 
+                and get back to you with a personalized plan within 24 hours.
               </p>
             </motion.div>
           </motion.div>

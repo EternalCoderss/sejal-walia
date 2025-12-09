@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 
 const packages = [
   {
+    id: 'starter',
     name: 'Starter',
     price: '₹1,500',
     usd: '$18',
@@ -20,6 +21,7 @@ const packages = [
     ],
   },
   {
+    id: 'professional',
     name: 'Professional',
     price: '₹3,500',
     usd: '$42',
@@ -35,6 +37,7 @@ const packages = [
     ],
   },
   {
+    id: 'premium',
     name: 'Premium',
     price: '₹5,000',
     usd: '$60',
@@ -53,10 +56,21 @@ const packages = [
   },
 ];
 
-const ServicesSection = () => {
+interface ServicesSectionProps {
+  onSelectPlan?: (planId: string, planName: string) => void;
+}
+
+const ServicesSection = ({ onSelectPlan }: ServicesSectionProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const handleSelectPlan = (planId: string, planName: string) => {
+    if (onSelectPlan) {
+      onSelectPlan(planId, planName);
+    }
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <section id="services" className="py-24 relative overflow-hidden" ref={ref}>
@@ -78,8 +92,8 @@ const ServicesSection = () => {
             Choose Your <span className="text-gradient">Success Path</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Tailored packages designed to elevate your freelancing career, 
-            no matter where you are in your journey.
+            Tailored packages designed to elevate your freelancing career. 
+            Select a plan below and fill out the form to get started.
           </p>
         </motion.div>
 
@@ -149,9 +163,9 @@ const ServicesSection = () => {
                     ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                     : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                 }`}
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => handleSelectPlan(pkg.id, pkg.name)}
               >
-                Get Started
+                Select {pkg.name}
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </motion.div>
