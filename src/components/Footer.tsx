@@ -31,7 +31,7 @@ const Footer = () => {
             className="flex items-center gap-4"
           >
             <a
-              href="mailto:Sejalwalia90@gmail.com"
+              href="mailto:Sejalw99@gmail.com"
               className="p-2 rounded-full hover:bg-secondary transition-colors group"
             >
               <Mail className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />

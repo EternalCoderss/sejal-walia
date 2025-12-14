@@ -124,8 +124,8 @@ const ContactSection = ({ selectedPlan }: ContactSectionProps) => {
     {
       icon: Mail,
       label: 'Email',
-      value: 'Sejalwalia90@gmail.com',
-      href: 'mailto:Sejalwalia90@gmail.com',
+      value: 'Sejalw99@gmail.com',
+      href: 'mailto:Sejalw99@gmail.com',
     },
     {
       icon: Linkedin,

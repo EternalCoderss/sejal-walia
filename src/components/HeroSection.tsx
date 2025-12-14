@@ -113,10 +113,10 @@ const HeroSection = () => {
               className="grid grid-cols-2 md:grid-cols-4 gap-3"
             >
               {[
-                { value: '2+', label: 'Years Experience' },
-                { value: '200+', label: 'Proposals Sent' },
-                { value: '100+', label: 'Clients Converted' },
-                { value: '95%', label: 'Success Rate' },
+                { value: '5+', label: 'Years Experience' },
+                { value: '1800+', label: 'Proposals Sent' },
+                { value: '999+', label: 'Clients Converted' },
+                { value: '97.5%', label: 'Success Rate' },
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}
@@ -215,7 +215,7 @@ const HeroSection = () => {
           className="fixed left-6 bottom-1/2 translate-y-1/2 hidden xl:flex flex-col gap-4 z-50"
         >
           <motion.a
-            href="mailto:Sejalwalia90@gmail.com"
+            href="mailto:Sejalw99@gmail.com"
             whileHover={{ scale: 1.2, x: 5 }}
             whileTap={{ scale: 0.9 }}
             className="p-3 glass rounded-full hover:border-primary/50 transition-colors"

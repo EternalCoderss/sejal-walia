@@ -107,7 +107,7 @@ const AboutSection = () => {
               className="text-muted-foreground text-lg leading-relaxed mb-6"
             >
               I'm a Digital Marketing professional and Upwork profile optimization specialist. 
-              With 2+ years of hands-on experience, I help freelancers improve their online presence, 
+              With 5+ years of hands-on experience, I help freelancers improve their online presence, 
               get noticed by clients, and dramatically increase their proposal conversion rates.
             </motion.p>
             

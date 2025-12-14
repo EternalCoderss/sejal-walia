@@ -22,9 +22,9 @@ const skillCategories = [
     skills: [
       { name: 'Proposal Writing', level: 95 },
       { name: 'Lead Generation', level: 90 },
-      { name: 'Market Research', level: 85 },
-      { name: 'Sales Funnel', level: 88 },
-      { name: 'Profile Optimization', level: 98 },
+      { name: 'Market Research', level: 95 },
+      { name: 'Sales Funnel', level: 90 },
+      { name: 'Profile Optimization', level: 100 },
     ],
   },
   {
@@ -35,7 +35,7 @@ const skillCategories = [
       { name: 'Client Chat', level: 95 },
       { name: 'Email Communication', level: 92 },
       { name: 'Requirement Gathering', level: 90 },
-      { name: 'Negotiation', level: 85 },
+      { name: 'Negotiation', level: 95 },
       { name: 'Relationship Building', level: 93 },
     ],
   },
