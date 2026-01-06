@@ -17,10 +17,7 @@ const Footer = () => {
           >
             <span>© {currentYear}</span>
             <span className="text-gradient font-bold font-space">Sejal Walia</span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              Made with <Heart className="w-3 h-3 text-destructive fill-destructive" /> 
-            </span>
+            <span>All rights reserved.</span>
           </motion.div>
 
           {/* Social Links */}

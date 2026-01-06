@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Target, Users, TrendingUp, Award, Quote } from 'lucide-react';
-import sejalImage from '@/assets/sejudiii.jpg';
+import sejalImage from '@/assets/portfolio-zenauf.jpg';
 
 const AboutSection = () => {
   const ref = useRef(null);

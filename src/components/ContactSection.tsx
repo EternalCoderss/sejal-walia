@@ -66,12 +66,16 @@ const ContactSection = ({ selectedPlan }: ContactSectionProps) => {
     setIsSubmitting(true);
 
     // Submit to Google Apps Script
-    const googleScriptUrl = localStorage.getItem('googleScriptUrl');
+    // Google Apps Script Web App URL - deployed and ready to receive form submissions
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYjHgXnjPit14fG_kwRnI4eb3-QgQeIe38KMzC6LRosYZhXsze8_BgLWaridb6h-lq/exec';
+    
+    // Use hardcoded URL first, fallback to localStorage for flexibility
+    const googleScriptUrl = GOOGLE_SCRIPT_URL || localStorage.getItem('googleScriptUrl');
     
     if (!googleScriptUrl) {
       toast({
         title: "Configuration Required",
-        description: "Please set up Google Sheets integration in the settings.",
+        description: "Please update the Google Apps Script URL in ContactSection.tsx or use the settings modal.",
         variant: "destructive",
       });
       setIsSubmitting(false);
@@ -90,7 +94,7 @@ const ContactSection = ({ selectedPlan }: ContactSectionProps) => {
         method: 'POST',
         mode: 'no-cors',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain',
         },
         body: JSON.stringify(submissionData),
       });

@@ -5,6 +5,7 @@ import AboutSection from '@/components/AboutSection';
 import ServicesSection from '@/components/ServicesSection';
 import SkillsSection from '@/components/SkillsSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
+import RecentClientsSection from '@/components/RecentClientsSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import GoogleSheetsSetup from '@/components/GoogleSheetsSetup';
@@ -25,6 +26,7 @@ const Index = () => {
         <ServicesSection onSelectPlan={handleSelectPlan} />
         <SkillsSection />
         <TestimonialsSection />
+        {/* <RecentClientsSection /> */}
         <ContactSection selectedPlan={selectedPlan} />
       </main>
       <Footer />

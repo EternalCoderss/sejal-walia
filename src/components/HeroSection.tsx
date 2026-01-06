@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
 import { ArrowDown, Mail, Linkedin, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import sejalImage from '@/assets/sejudiii.jpg';
+import sejalImage from '@/assets/portfolio-zenauf.jpg';
 
 const HeroSection = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
     >
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -61,7 +61,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold font-space leading-tight mb-6"
+              className="text-5xl md:text-6xl lg:text-7xl font-bold font-space leading-[1.1] mb-6"
             >
               Hi, I'm{' '}
               <span className="text-gradient">Sejal Walia</span>
@@ -195,7 +195,7 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 0.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="absolute left-1/2 -translate-x-1/2 -bottom-20"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}
